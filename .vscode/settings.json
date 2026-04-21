@@ -1,0 +1,13 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "wsl": true,
+        "/^wsl -d Ubuntu -- bash -lc \"mysql -h localhost -u laravel -plaravel123 -e 'SELECT CURRENT_USER\\(\\) AS current_user, USER\\(\\) AS login_user;'\"$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^wsl -d Ubuntu -- bash -lc 'mysql -h localhost -u laravel -plaravel123 -e \"SELECT CURRENT_USER\\(\\) AS cu, USER\\(\\) AS lu;\"'$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
