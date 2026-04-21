@@ -11,8 +11,9 @@ use Illuminate\Validation\Rule;
 
 class StaffApiController extends BaseApiController
 {
-    public function __construct(private readonly IdGeneratorService $idGenerator)
+    public function __construct(IdGeneratorService $idGenerator)
     {
+        $this->idGenerator = $idGenerator;
     }
 
     public function index(Request $request): JsonResponse
@@ -69,7 +70,7 @@ class StaffApiController extends BaseApiController
             return $this->error('Không thể xóa nhân viên đã có phiếu mượn trả.', 409);
         }
 
-        if ($request->user()?->maNV === $staff->maNV) {
+        if (optional($request->user())->maNV === $staff->maNV) {
             return $this->error('Không thể xóa tài khoản đang đăng nhập.', 409);
         }
 
@@ -85,11 +86,11 @@ class StaffApiController extends BaseApiController
             'ngaySinh' => ['required', 'date'],
             'diaChi' => ['required', 'string', 'max:255'],
             'gioiTinh' => ['required', 'in:Nam,Nữ'],
-            'soDT' => ['required', 'regex:/^\d{10,12}$/', Rule::unique('nhanvien', 'soDT')->ignore($staff?->maNV, 'maNV')],
-            'email' => ['required', 'email', 'max:100', Rule::unique('nhanvien', 'email')->ignore($staff?->maNV, 'maNV')],
+            'soDT' => ['required', 'regex:/^\d{10,12}$/', Rule::unique('nhanvien', 'soDT')->ignore(optional($staff)->maNV, 'maNV')],
+            'email' => ['required', 'email', 'max:100', Rule::unique('nhanvien', 'email')->ignore(optional($staff)->maNV, 'maNV')],
             'vaitro' => ['required', 'in:Quản lý thư viện,Thủ thư'],
             'trangThaiTK' => ['nullable', 'in:Đang hoạt động,Bị khóa,Chờ kích hoạt'],
-            'tenDangNhap' => ['required', 'string', 'max:50', Rule::unique('nhanvien', 'tenDangNhap')->ignore($staff?->maNV, 'maNV')],
+            'tenDangNhap' => ['required', 'string', 'max:50', Rule::unique('nhanvien', 'tenDangNhap')->ignore(optional($staff)->maNV, 'maNV')],
             'matKhau' => [$staff ? 'nullable' : 'required', 'string', 'min:6'],
         ]);
     }

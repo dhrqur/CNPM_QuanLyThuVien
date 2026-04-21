@@ -13,8 +13,9 @@ use Illuminate\Validation\ValidationException;
 
 class BorrowService
 {
-    public function __construct(private readonly IdGeneratorService $idGenerator)
+    public function __construct(IdGeneratorService $idGenerator)
     {
+        $this->idGenerator = $idGenerator;
     }
 
     public function createBorrow(array $validated, User $staff): Borrow

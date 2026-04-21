@@ -8,8 +8,9 @@ use Illuminate\Http\Request;
 
 class ShelfController extends Controller
 {
-    public function __construct(private readonly IdGeneratorService $idGenerator)
+    public function __construct(IdGeneratorService $idGenerator)
     {
+        $this->idGenerator = $idGenerator;
     }
 
     public function index(Request $request)
@@ -56,6 +57,13 @@ class ShelfController extends Controller
             'shelf' => $shelf,
             'isEdit' => true,
         ]);
+    }
+
+    public function show(Shelf $shelf)
+    {
+        $shelf->loadCount('books');
+
+        return view('shelves.show', compact('shelf'));
     }
 
     public function update(Request $request, Shelf $shelf)

@@ -8,8 +8,9 @@ use Illuminate\Http\Request;
 
 class LanguageController extends Controller
 {
-    public function __construct(private readonly IdGeneratorService $idGenerator)
+    public function __construct(IdGeneratorService $idGenerator)
     {
+        $this->idGenerator = $idGenerator;
     }
 
     public function index(Request $request)
@@ -56,6 +57,13 @@ class LanguageController extends Controller
             'language' => $language,
             'isEdit' => true,
         ]);
+    }
+
+    public function show(Language $language)
+    {
+        $language->loadCount('books');
+
+        return view('languages.show', compact('language'));
     }
 
     public function update(Request $request, Language $language)

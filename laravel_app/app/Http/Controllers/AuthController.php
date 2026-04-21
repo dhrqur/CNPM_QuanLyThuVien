@@ -117,8 +117,8 @@ class AuthController extends Controller
 
     private function isHashedPassword(string $password): bool
     {
-        return str_starts_with($password, '$2y$')
-            || str_starts_with($password, '$argon2i$')
-            || str_starts_with($password, '$argon2id$');
+        return strpos($password, '$2y$') === 0
+            || strpos($password, '$argon2i$') === 0
+            || strpos($password, '$argon2id$') === 0;
     }
 }

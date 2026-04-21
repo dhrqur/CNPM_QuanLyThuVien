@@ -27,13 +27,10 @@ class LibraryCard extends Model
         'trangThai',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'ngayCap' => 'date',
-            'ngayHetHan' => 'date',
-        ];
-    }
+    protected $casts = [
+        'ngayCap' => 'date',
+        'ngayHetHan' => 'date',
+    ];
 
     public function reader()
     {

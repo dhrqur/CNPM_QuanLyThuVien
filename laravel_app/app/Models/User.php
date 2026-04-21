@@ -43,12 +43,9 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'ngaySinh' => 'date',
-        ];
-    }
+    protected $casts = [
+        'ngaySinh' => 'date',
+    ];
 
     public function getAuthPassword(): string
     {

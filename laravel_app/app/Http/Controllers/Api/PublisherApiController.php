@@ -10,8 +10,9 @@ use Illuminate\Validation\Rule;
 
 class PublisherApiController extends BaseApiController
 {
-    public function __construct(private readonly IdGeneratorService $idGenerator)
+    public function __construct(IdGeneratorService $idGenerator)
     {
+        $this->idGenerator = $idGenerator;
     }
 
     public function index(Request $request): JsonResponse

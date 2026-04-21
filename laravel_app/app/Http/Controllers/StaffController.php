@@ -11,8 +11,9 @@ use Illuminate\Validation\Rule;
 
 class StaffController extends Controller
 {
-    public function __construct(private readonly IdGeneratorService $idGenerator)
+    public function __construct(IdGeneratorService $idGenerator)
     {
+        $this->idGenerator = $idGenerator;
     }
 
     public function index(Request $request)
@@ -59,6 +60,13 @@ class StaffController extends Controller
         ]);
     }
 
+    public function show(User $staff)
+    {
+        $staff->loadCount('borrows');
+
+        return view('staffs.show', compact('staff'));
+    }
+
     public function update(Request $request, User $staff)
     {
         $data = $this->validateData($request, $staff);
@@ -92,7 +100,7 @@ class StaffController extends Controller
     private function validateData(Request $request, ?User $staff = null): array
     {
         $isEdit = $staff !== null;
-        $id = $staff?->maNV;
+        $id = optional($staff)->maNV;
 
         return $request->validate([
             'tenNV' => ['required', 'string', 'max:100'],

@@ -8,8 +8,9 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function __construct(private readonly IdGeneratorService $idGenerator)
+    public function __construct(IdGeneratorService $idGenerator)
     {
+        $this->idGenerator = $idGenerator;
     }
 
     public function index(Request $request)
@@ -56,6 +57,13 @@ class CategoryController extends Controller
             'category' => $category,
             'isEdit' => true,
         ]);
+    }
+
+    public function show(Category $category)
+    {
+        $category->loadCount('books');
+
+        return view('categories.show', compact('category'));
     }
 
     public function update(Request $request, Category $category)

@@ -10,8 +10,9 @@ use Illuminate\Validation\Rule;
 
 class ReaderController extends Controller
 {
-    public function __construct(private readonly IdGeneratorService $idGenerator)
+    public function __construct(IdGeneratorService $idGenerator)
     {
+        $this->idGenerator = $idGenerator;
     }
 
     public function index(Request $request)
@@ -58,6 +59,18 @@ class ReaderController extends Controller
         ]);
     }
 
+    public function show(Reader $reader)
+    {
+        $reader->load('card')->loadCount([
+            'borrows',
+            'borrows as active_borrows_count' => function ($query) {
+                $query->whereIn('trangThai', ['Đang mượn', 'Quá hạn']);
+            },
+        ]);
+
+        return view('readers.show', compact('reader'));
+    }
+
     public function update(Request $request, Reader $reader)
     {
         $reader->update($this->validateData($request, $reader));
@@ -82,7 +95,7 @@ class ReaderController extends Controller
 
     private function validateData(Request $request, ?Reader $reader = null): array
     {
-        $id = $reader?->maDG;
+        $id = optional($reader)->maDG;
 
         return $request->validate([
             'tenDG' => ['required', 'string', 'max:100'],

@@ -438,6 +438,11 @@ body{
     max-width:380px;
 }
 
+.search-box-wide{
+    max-width:none;
+    width:100%;
+}
+
 .table-wrap{
     background:#fff;
     border:1px solid #f8e4d2;

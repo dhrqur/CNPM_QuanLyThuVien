@@ -13,9 +13,12 @@ use Illuminate\Validation\Rule;
 class LibraryCardController extends Controller
 {
     public function __construct(
-        private readonly IdGeneratorService $idGenerator,
-        private readonly StatusService $statusService,
-    ) {
+        IdGeneratorService $idGenerator,
+        StatusService $statusService
+    )
+    {
+        $this->idGenerator = $idGenerator;
+        $this->statusService = $statusService;
     }
 
     public function index(Request $request)
@@ -73,6 +76,13 @@ class LibraryCardController extends Controller
         ]);
     }
 
+    public function show(LibraryCard $libraryCard)
+    {
+        $libraryCard->load('reader');
+
+        return view('library_cards.show', compact('libraryCard'));
+    }
+
     public function update(Request $request, LibraryCard $libraryCard)
     {
         $data = $this->validateData($request, $libraryCard);
@@ -97,7 +107,7 @@ class LibraryCardController extends Controller
 
     private function validateData(Request $request, ?LibraryCard $libraryCard = null): array
     {
-        $id = $libraryCard?->maTTV;
+        $id = optional($libraryCard)->maTTV;
 
         return $request->validate([
             'maDG' => [
@@ -108,10 +118,10 @@ class LibraryCardController extends Controller
             'ngayCap' => ['required', 'date'],
             'ngayHetHan' => ['required', 'date', 'after_or_equal:ngayCap'],
         ], [
-            'maDG.required' => 'Vui lòng chọn độc giả.',
+            //'maDG.required' => 'Vui lòng chọn độc giả.',
             'maDG.unique' => 'Độc giả này đã có thẻ thư viện.',
-            'ngayCap.required' => 'Ngày cấp không được để trống.',
-            'ngayHetHan.required' => 'Ngày hết hạn không được để trống.',
+            // 'ngayCap.required' => 'Ngày cấp không được để trống.',
+            // 'ngayHetHan.required' => 'Ngày hết hạn không được để trống.',
             'ngayHetHan.after_or_equal' => 'Ngày hết hạn phải lớn hơn hoặc bằng ngày cấp.',
         ]);
     }

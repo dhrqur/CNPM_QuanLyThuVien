@@ -17,8 +17,9 @@ use Throwable;
 
 class BookController extends Controller
 {
-    public function __construct(private readonly IdGeneratorService $idGenerator)
+    public function __construct(IdGeneratorService $idGenerator)
     {
+        $this->idGenerator = $idGenerator;
     }
 
     public function index(Request $request)
@@ -31,7 +32,9 @@ class BookController extends Controller
             'trangThai' => trim((string) $request->query('trangThai', '')),
         ];
 
-        $hasFilter = collect($filters)->contains(fn ($value) => $value !== '');
+        $hasFilter = collect($filters)->contains(function ($value) {
+            return $value !== '';
+        });
 
         $validator = Validator::make($filters, [
             'search' => ['nullable', 'string', 'max:200'],
@@ -62,7 +65,7 @@ class BookController extends Controller
                 ->orderBy('maSach')
                 ->paginate(5)
                 ->withQueryString();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
             $message = $hasFilter
                 ? 'Tìm kiếm thất bại, vui lòng thử lại.'
                 : 'Không thể tải danh sách sách.';
@@ -144,7 +147,7 @@ class BookController extends Controller
 
         try {
             $book->update($data);
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
             return back()
                 ->withInput()
                 ->with('danger', 'Cập nhật thất bại, vui lòng thử lại.');
@@ -161,7 +164,7 @@ class BookController extends Controller
 
         try {
             $book->delete();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
             return back()->with('danger', 'Xóa thất bại, vui lòng thử lại.');
         }
 
@@ -170,7 +173,7 @@ class BookController extends Controller
 
     private function validateData(Request $request, ?Book $book = null, bool $trackCreateAttempts = false): array
     {
-        $id = $book?->maSach;
+        $id = optional($book)->maSach;
 
         $rules = [
             'tenSach' => [

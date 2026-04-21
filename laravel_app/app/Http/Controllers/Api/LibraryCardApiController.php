@@ -13,9 +13,12 @@ use Illuminate\Validation\Rule;
 class LibraryCardApiController extends BaseApiController
 {
     public function __construct(
-        private readonly IdGeneratorService $idGenerator,
-        private readonly StatusService $statusService,
-    ) {
+        IdGeneratorService $idGenerator,
+        StatusService $statusService
+    )
+    {
+        $this->idGenerator = $idGenerator;
+        $this->statusService = $statusService;
     }
 
     public function index(Request $request): JsonResponse
@@ -83,7 +86,7 @@ class LibraryCardApiController extends BaseApiController
             'maDG' => [
                 'required',
                 Rule::exists('docgia', 'maDG'),
-                Rule::unique('thethuvien', 'maDG')->ignore($libraryCard?->maTTV, 'maTTV'),
+                Rule::unique('thethuvien', 'maDG')->ignore(optional($libraryCard)->maTTV, 'maTTV'),
             ],
             'ngayCap' => ['required', 'date'],
             'ngayHetHan' => ['required', 'date', 'after_or_equal:ngayCap'],

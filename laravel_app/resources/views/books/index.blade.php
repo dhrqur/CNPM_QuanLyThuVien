@@ -16,7 +16,7 @@
     </div>
 
     <form method="GET" class="mt-3">
-        <div class="row g-2 search-box">
+        <div class="row g-2 search-box search-box-wide">
             <div class="col-md-3">
                 <input type="text" name="search" class="form-control" placeholder="Từ khóa chung" value="{{ $filters['search'] ?? '' }}">
             </div>
@@ -71,11 +71,11 @@
                 <tr>
                     <td>{{ $book->maSach }}</td>
                     <td>{{ $book->tenSach }}</td>
-                    <td>{{ $book->author?->tenTG }}</td>
-                    <td>{{ $book->category?->tenTL }}</td>
-                    <td>{{ $book->publisher?->tenNXB }}</td>
-                    <td>{{ $book->language?->tenNN }}</td>
-                    <td>{{ $book->shelf?->tenKS }}</td>
+                    <td>{{ optional($book->author)->tenTG }}</td>
+                    <td>{{ optional($book->category)->tenTL }}</td>
+                    <td>{{ optional($book->publisher)->tenNXB }}</td>
+                    <td>{{ optional($book->language)->tenNN }}</td>
+                    <td>{{ optional($book->shelf)->tenKS }}</td>
                     <td>{{ $book->namXB }}</td>
                     <td>{{ $book->soLuong }}</td>
                     <td>
@@ -107,5 +107,5 @@
     </div>
 </div>
 
-<div class="mt-3">{{ $books->links('pagination::bootstrap-5') }}</div>
+<div class="mt-3">{{ $books->links('pagination::bootstrap-4') }}</div>
 @endsection

@@ -9,7 +9,7 @@
     </div>
 
     <nav class="sidebar-nav">
-        <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}"><i class="bi bi-grid"></i> Dashboard</a>
+        <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}"><i class="bi bi-grid"></i> Thống kê và Báo cáo</a>
         <a href="{{ route('sach.index') }}" class="nav-item {{ request()->routeIs('sach.*') ? 'active' : '' }}"><i class="bi bi-book"></i> Quản lý Sách</a>
         <a href="{{ route('docgia.index') }}" class="nav-item {{ request()->routeIs('docgia.*') ? 'active' : '' }}"><i class="bi bi-people"></i> Quản lý Độc giả</a>
         <a href="{{ route('muontra.index') }}" class="nav-item {{ request()->routeIs('muontra.*') ? 'active' : '' }}"><i class="bi bi-arrow-left-right"></i> Quản lý Mượn trả</a>
@@ -27,7 +27,7 @@
 
     <div class="sidebar-user">
         <div>Đăng nhập bởi</div>
-        <strong>{{ $user?->tenNV }}</strong>
+        <strong>{{ optional($user)->tenNV }}</strong>
     </div>
 
     <form method="POST" action="{{ route('logout') }}">

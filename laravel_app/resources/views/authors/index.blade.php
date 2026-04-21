@@ -66,6 +66,6 @@
 </div>
 
 <div class="mt-3">
-    {{ $authors->links('pagination::bootstrap-5') }}
+    {{ $authors->links('pagination::bootstrap-4') }}
 </div>
 @endsection

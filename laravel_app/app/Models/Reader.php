@@ -29,12 +29,9 @@ class Reader extends Model
         'email',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'ngaySinh' => 'date',
-        ];
-    }
+    protected $casts = [
+        'ngaySinh' => 'date',
+    ];
 
     public function card()
     {

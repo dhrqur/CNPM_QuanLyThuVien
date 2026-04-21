@@ -9,8 +9,9 @@ use Illuminate\Validation\Rule;
 
 class PublisherController extends Controller
 {
-    public function __construct(private readonly IdGeneratorService $idGenerator)
+    public function __construct(IdGeneratorService $idGenerator)
     {
+        $this->idGenerator = $idGenerator;
     }
 
     public function index(Request $request)
@@ -57,6 +58,13 @@ class PublisherController extends Controller
         ]);
     }
 
+    public function show(Publisher $publisher)
+    {
+        $publisher->loadCount('books');
+
+        return view('publishers.show', compact('publisher'));
+    }
+
     public function update(Request $request, Publisher $publisher)
     {
         $publisher->update($this->validateData($request, $publisher));
@@ -77,7 +85,7 @@ class PublisherController extends Controller
 
     private function validateData(Request $request, ?Publisher $publisher = null): array
     {
-        $id = $publisher?->maNXB;
+        $id = optional($publisher)->maNXB;
 
         return $request->validate([
             'tenNXB' => ['required', 'string', 'max:100'],

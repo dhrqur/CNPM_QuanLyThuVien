@@ -110,17 +110,17 @@ class AuthApiController extends BaseApiController
         $user = $request->user();
 
         return $this->success([
-            'maNV' => $user?->maNV,
-            'tenNV' => $user?->tenNV,
-            'tenDangNhap' => $user?->tenDangNhap,
-            'vaitro' => $user?->vaitro,
-            'trangThaiTK' => $user?->getAccountStatus(),
+            'maNV' => optional($user)->maNV,
+            'tenNV' => optional($user)->tenNV,
+            'tenDangNhap' => optional($user)->tenDangNhap,
+            'vaitro' => optional($user)->vaitro,
+            'trangThaiTK' => optional($user)->getAccountStatus(),
         ]);
     }
 
     public function logout(Request $request): JsonResponse
     {
-        $token = $request->user()?->currentAccessToken();
+        $token = optional($request->user())->currentAccessToken();
         if ($token) {
             $token->delete();
         }
@@ -149,8 +149,8 @@ class AuthApiController extends BaseApiController
 
     private function isHashedPassword(string $password): bool
     {
-        return str_starts_with($password, '$2y$')
-            || str_starts_with($password, '$argon2i$')
-            || str_starts_with($password, '$argon2id$');
+        return strpos($password, '$2y$') === 0
+            || strpos($password, '$argon2i$') === 0
+            || strpos($password, '$argon2id$') === 0;
     }
 }

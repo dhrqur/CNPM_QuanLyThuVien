@@ -29,14 +29,11 @@ class Borrow extends Model
         'trangThai',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'ngayMuon' => 'date',
-            'hanTra' => 'date',
-            'ngayTra' => 'date',
-        ];
-    }
+    protected $casts = [
+        'ngayMuon' => 'date',
+        'hanTra' => 'date',
+        'ngayTra' => 'date',
+    ];
 
     public function reader()
     {

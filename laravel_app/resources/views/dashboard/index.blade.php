@@ -1,10 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard')
-@section('page_title', 'Dashboard')
-@section('page_subtitle', 'Tổng quan hoạt động thư viện')
+@section('title', 'Thống kê và Báo cáo')
+@section('page_title', 'Thống kê và Báo cáo')
+@section('page_subtitle', 'Theo dõi số liệu vận hành và báo cáo mượn trả')
 
 @section('content')
+<div class="content-card p-3 mb-3">
+    <h3 class="section-title h4 mb-1">Thống kê nhanh</h3>
+    <div class="text-muted">Tổng hợp dữ liệu quan trọng của thư viện theo thời gian thực.</div>
+</div>
+
 <section class="stats-grid">
     <div class="stat-card">
         <div class="d-flex justify-content-between align-items-center">
@@ -49,7 +54,7 @@
 
 <section class="grid-two">
     <div class="content-card p-3">
-        <h3 class="section-title h4 mb-3">Top 5 độc giả mượn nhiều nhất</h3>
+        <h3 class="section-title h4 mb-3">Báo cáo top 5 độc giả mượn nhiều nhất</h3>
         <div class="table-responsive">
             <table class="table">
                 <thead>
@@ -75,7 +80,7 @@
     </div>
 
     <div class="content-card p-3">
-        <h3 class="section-title h4 mb-3">Top 5 sách mượn nhiều nhất</h3>
+        <h3 class="section-title h4 mb-3">Báo cáo top 5 sách mượn nhiều nhất</h3>
         <div class="table-responsive">
             <table class="table">
                 <thead>
@@ -102,7 +107,7 @@
 </section>
 
 <section class="content-card p-3">
-    <h3 class="section-title h4 mb-3">Top 10 phiếu mượn quá hạn</h3>
+    <h3 class="section-title h4 mb-3">Báo cáo phiếu mượn quá hạn</h3>
     <div class="table-responsive">
         <table class="table">
             <thead>

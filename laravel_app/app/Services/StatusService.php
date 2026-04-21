@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Book;
+use App\Models\Borrow;
 use Illuminate\Support\Facades\DB;
 
 class StatusService
@@ -31,5 +32,21 @@ class StatusService
         DB::table('muontra')->update([
             'trangThai' => DB::raw("CASE WHEN ngayTra IS NOT NULL THEN 'Đã trả' WHEN ngayTra IS NULL AND hanTra < CURDATE() THEN 'Quá hạn' ELSE 'Đang mượn' END"),
         ]);
+    }
+
+    public function syncBorrowStatus(Borrow $borrow): void
+    {
+        $newStatus = 'Đang mượn';
+
+        if ($borrow->ngayTra !== null) {
+            $newStatus = 'Đã trả';
+        } elseif ($borrow->hanTra !== null && $borrow->hanTra->toDateString() < now()->toDateString()) {
+            $newStatus = 'Quá hạn';
+        }
+
+        if ($borrow->trangThai !== $newStatus) {
+            $borrow->trangThai = $newStatus;
+            $borrow->save();
+        }
     }
 }

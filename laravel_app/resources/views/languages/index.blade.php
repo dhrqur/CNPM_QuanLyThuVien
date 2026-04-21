@@ -53,5 +53,5 @@
     </div>
 </div>
 
-<div class="mt-3">{{ $languages->links('pagination::bootstrap-5') }}</div>
+<div class="mt-3">{{ $languages->links('pagination::bootstrap-4') }}</div>
 @endsection

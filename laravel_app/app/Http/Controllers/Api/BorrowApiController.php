@@ -12,9 +12,12 @@ use Illuminate\Validation\Rule;
 class BorrowApiController extends BaseApiController
 {
     public function __construct(
-        private readonly BorrowService $borrowService,
-        private readonly StatusService $statusService,
-    ) {
+        BorrowService $borrowService,
+        StatusService $statusService
+    )
+    {
+        $this->borrowService = $borrowService;
+        $this->statusService = $statusService;
     }
 
     public function index(Request $request): JsonResponse

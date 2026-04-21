@@ -32,7 +32,7 @@
                 <th>SĐT</th>
                 <th>Email</th>
                 <th>Tên đăng nhập</th>
-                <th width="170">Thao tác</th>
+                <th width="240">Thao tác</th>
             </tr>
             </thead>
             <tbody>
@@ -45,6 +45,7 @@
                     <td>{{ $staff->email }}</td>
                     <td>{{ $staff->tenDangNhap }}</td>
                     <td class="action-btns">
+                        <a href="{{ route('nhanvien.show', $staff) }}" class="btn btn-info btn-sm">Xem chi tiết</a>
                         <a href="{{ route('nhanvien.edit', $staff) }}" class="btn btn-warning btn-sm">Sửa</a>
                         <form method="POST" action="{{ route('nhanvien.destroy', $staff) }}" class="d-inline">
                             @csrf
@@ -61,5 +62,5 @@
     </div>
 </div>
 
-<div class="mt-3">{{ $staffs->links('pagination::bootstrap-5') }}</div>
+<div class="mt-3">{{ $staffs->links('pagination::bootstrap-4') }}</div>
 @endsection

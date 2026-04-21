@@ -33,7 +33,7 @@
                 <th>Địa chỉ</th>
                 <th>SĐT</th>
                 <th>Email</th>
-                <th width="170">Thao tác</th>
+                <th width="240">Thao tác</th>
             </tr>
             </thead>
             <tbody>
@@ -47,6 +47,7 @@
                     <td>{{ $reader->soDT }}</td>
                     <td>{{ $reader->email }}</td>
                     <td class="action-btns">
+                        <a href="{{ route('docgia.show', $reader) }}" class="btn btn-info btn-sm">Xem chi tiết</a>
                         <a href="{{ route('docgia.edit', $reader) }}" class="btn btn-warning btn-sm">Sửa</a>
                         <form method="POST" action="{{ route('docgia.destroy', $reader) }}" class="d-inline">
                             @csrf
@@ -63,5 +64,5 @@
     </div>
 </div>
 
-<div class="mt-3">{{ $readers->links('pagination::bootstrap-5') }}</div>
+<div class="mt-3">{{ $readers->links('pagination::bootstrap-4') }}</div>
 @endsection

@@ -11,8 +11,9 @@ use Illuminate\Validation\Rule;
 
 class ReaderApiController extends BaseApiController
 {
-    public function __construct(private readonly IdGeneratorService $idGenerator)
+    public function __construct(IdGeneratorService $idGenerator)
     {
+        $this->idGenerator = $idGenerator;
     }
 
     public function index(Request $request): JsonResponse
@@ -80,13 +81,13 @@ class ReaderApiController extends BaseApiController
             'soDT' => [
                 'required',
                 'regex:/^\d{10,12}$/',
-                Rule::unique('docgia', 'soDT')->ignore($reader?->maDG, 'maDG'),
+                Rule::unique('docgia', 'soDT')->ignore(optional($reader)->maDG, 'maDG'),
             ],
             'email' => [
                 'required',
                 'email',
                 'max:100',
-                Rule::unique('docgia', 'email')->ignore($reader?->maDG, 'maDG'),
+                Rule::unique('docgia', 'email')->ignore(optional($reader)->maDG, 'maDG'),
             ],
         ]);
     }

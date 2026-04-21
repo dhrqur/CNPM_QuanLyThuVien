@@ -9,8 +9,9 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    public function __construct(private readonly StatusService $statusService)
+    public function __construct(StatusService $statusService)
     {
+        $this->statusService = $statusService;
     }
 
     public function index()
@@ -51,7 +52,6 @@ class DashboardController extends Controller
             ->whereNull('mt.ngayTra')
             ->where('mt.hanTra', '<', now()->toDateString())
             ->orderBy('mt.hanTra')
-            ->limit(10)
             ->get();
 
         return view('dashboard.index', [

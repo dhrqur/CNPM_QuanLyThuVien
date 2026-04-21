@@ -14,8 +14,9 @@ use Throwable;
 
 class BookApiController extends BaseApiController
 {
-    public function __construct(private readonly IdGeneratorService $idGenerator)
+    public function __construct(IdGeneratorService $idGenerator)
     {
+        $this->idGenerator = $idGenerator;
     }
 
     public function index(Request $request): JsonResponse
@@ -28,7 +29,9 @@ class BookApiController extends BaseApiController
             'trangThai' => trim((string) $request->query('trangThai', '')),
         ];
 
-        $hasFilter = collect($filters)->contains(fn ($value) => $value !== '');
+        $hasFilter = collect($filters)->contains(function ($value) {
+            return $value !== '';
+        });
 
         $validator = Validator::make($filters, [
             'search' => ['nullable', 'string', 'max:200'],
@@ -54,7 +57,7 @@ class BookApiController extends BaseApiController
                 ->applyFilters($filters)
                 ->orderBy('maSach')
                 ->paginate((int) $request->query('per_page', 10));
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
             $message = $hasFilter
                 ? 'Tìm kiếm thất bại, vui lòng thử lại.'
                 : 'Không thể tải danh sách sách.';
@@ -105,7 +108,7 @@ class BookApiController extends BaseApiController
 
         try {
             $book->update($data);
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
             return $this->error('Cập nhật thất bại, vui lòng thử lại.', 500);
         }
 
@@ -120,7 +123,7 @@ class BookApiController extends BaseApiController
 
         try {
             $book->delete();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
             return $this->error('Xóa thất bại, vui lòng thử lại.', 500);
         }
 
@@ -134,7 +137,7 @@ class BookApiController extends BaseApiController
                 'required',
                 'string',
                 'max:200',
-                Rule::unique('sach', 'tenSach')->ignore($book?->maSach, 'maSach'),
+                Rule::unique('sach', 'tenSach')->ignore(optional($book)->maSach, 'maSach'),
             ],
             'maTG' => ['required', Rule::exists('tacgia', 'maTG')],
             'maNXB' => ['required', Rule::exists('nhaxuatban', 'maNXB')],

@@ -92,13 +92,19 @@ class Book extends Model
                         });
                 });
             })
-            ->when($maSach !== '', fn ($builder) => $builder->where('maSach', 'like', "%{$maSach}%"))
-            ->when($tenSach !== '', fn ($builder) => $builder->where('tenSach', 'like', "%{$tenSach}%"))
+            ->when($maSach !== '', function ($builder) use ($maSach) {
+                $builder->where('maSach', 'like', "%{$maSach}%");
+            })
+            ->when($tenSach !== '', function ($builder) use ($tenSach) {
+                $builder->where('tenSach', 'like', "%{$tenSach}%");
+            })
             ->when($tacGia !== '', function ($builder) use ($tacGia) {
                 $builder->whereHas('author', function ($authorQuery) use ($tacGia) {
                     $authorQuery->where('tenTG', 'like', "%{$tacGia}%");
                 });
             })
-            ->when(in_array($trangThai, ['Còn', 'Hết'], true), fn ($builder) => $builder->where('trangThai', $trangThai));
+            ->when(in_array($trangThai, ['Còn', 'Hết'], true), function ($builder) use ($trangThai) {
+                $builder->where('trangThai', $trangThai);
+            });
     }
 }

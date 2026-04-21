@@ -30,15 +30,15 @@
                 </tr>
                 <tr>
                     <th>Tác giả</th>
-                    <td>{{ $book->author?->tenTG }}</td>
+                    <td>{{ optional($book->author)->tenTG }}</td>
                 </tr>
                 <tr>
                     <th>Nhà xuất bản</th>
-                    <td>{{ $book->publisher?->tenNXB }}</td>
+                    <td>{{ optional($book->publisher)->tenNXB }}</td>
                 </tr>
                 <tr>
                     <th>Thể loại</th>
-                    <td>{{ $book->category?->tenTL }}</td>
+                    <td>{{ optional($book->category)->tenTL }}</td>
                 </tr>
                 <tr>
                     <th>Năm xuất bản</th>
@@ -46,11 +46,11 @@
                 </tr>
                 <tr>
                     <th>Ngôn ngữ</th>
-                    <td>{{ $book->language?->tenNN }}</td>
+                    <td>{{ optional($book->language)->tenNN }}</td>
                 </tr>
                 <tr>
                     <th>Vị trí / Kệ sách</th>
-                    <td>{{ $book->shelf?->tenKS }}</td>
+                    <td>{{ optional($book->shelf)->tenKS }}</td>
                 </tr>
                 <tr>
                     <th>Số lượng</th>

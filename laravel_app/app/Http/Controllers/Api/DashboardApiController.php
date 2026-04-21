@@ -10,8 +10,9 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardApiController extends BaseApiController
 {
-    public function __construct(private readonly StatusService $statusService)
+    public function __construct(StatusService $statusService)
     {
+        $this->statusService = $statusService;
     }
 
     public function index(): JsonResponse
@@ -52,7 +53,6 @@ class DashboardApiController extends BaseApiController
             ->whereNull('mt.ngayTra')
             ->where('mt.hanTra', '<', now()->toDateString())
             ->orderBy('mt.hanTra')
-            ->limit(10)
             ->get();
 
         return $this->success([

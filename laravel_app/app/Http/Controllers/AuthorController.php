@@ -8,8 +8,9 @@ use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
-    public function __construct(private readonly IdGeneratorService $idGenerator)
+    public function __construct(IdGeneratorService $idGenerator)
     {
+        $this->idGenerator = $idGenerator;
     }
 
     public function index(Request $request)
@@ -53,6 +54,13 @@ class AuthorController extends Controller
             'author' => $author,
             'isEdit' => true,
         ]);
+    }
+
+    public function show(Author $author)
+    {
+        $author->loadCount('books');
+
+        return view('authors.show', compact('author'));
     }
 
     public function update(Request $request, Author $author)

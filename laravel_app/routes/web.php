@@ -32,16 +32,16 @@ Route::middleware(['auth', 'role:Quản lý thư viện,Thủ thư'])->group(fun
     Route::resource('nhaxuatban', PublisherController::class)->except(['show'])->parameters(['nhaxuatban' => 'publisher']);
     Route::resource('ngonngu', LanguageController::class)->except(['show'])->parameters(['ngonngu' => 'language']);
     Route::resource('kesach', ShelfController::class)->except(['show'])->parameters(['kesach' => 'shelf']);
-    Route::resource('docgia', ReaderController::class)->except(['show'])->parameters(['docgia' => 'reader']);
+    Route::resource('docgia', ReaderController::class)->parameters(['docgia' => 'reader']);
     Route::resource('thethuvien', LibraryCardController::class)->except(['show'])->parameters(['thethuvien' => 'libraryCard']);
 
     Route::resource('muontra', BorrowController::class)
-        ->only(['index', 'create', 'store', 'destroy'])
+        ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])
         ->parameters(['muontra' => 'borrow']);
     Route::post('/muontra/{borrow}/return', [BorrowController::class, 'returnBook'])->name('muontra.return');
     Route::post('/muontra/{borrow}/extend', [BorrowController::class, 'extend'])->name('muontra.extend');
 
     Route::middleware('role:Quản lý thư viện')->group(function () {
-        Route::resource('nhanvien', StaffController::class)->except(['show'])->parameters(['nhanvien' => 'staff']);
+        Route::resource('nhanvien', StaffController::class)->parameters(['nhanvien' => 'staff']);
     });
 });

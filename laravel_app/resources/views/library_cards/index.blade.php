@@ -40,7 +40,7 @@
                 <tr>
                     <td>{{ $card->maTTV }}</td>
                     <td>{{ $card->maDG }}</td>
-                    <td>{{ $card->reader?->tenDG }}</td>
+                    <td>{{ optional($card->reader)->tenDG }}</td>
                     <td>{{ optional($card->ngayCap)->format('d/m/Y') }}</td>
                     <td>{{ optional($card->ngayHetHan)->format('d/m/Y') }}</td>
                     <td>
@@ -67,5 +67,5 @@
     </div>
 </div>
 
-<div class="mt-3">{{ $cards->links('pagination::bootstrap-5') }}</div>
+<div class="mt-3">{{ $cards->links('pagination::bootstrap-4') }}</div>
 @endsection

@@ -2,14 +2,14 @@
 
 @section('title', 'Quản lý Mượn trả')
 @section('page_title', 'Quản lý Mượn trả')
-@section('page_subtitle', 'Theo dõi phiếu mượn và trạng thái trả sách')
+@section('page_subtitle', 'Theo dõi phiếu mượn, gia hạn hoặc sửa trực tiếp từ danh sách')
 
 @section('content')
 <div class="content-toolbar">
     <div class="page-header mb-0">
         <div>
             <h2 class="page-title">Mượn trả</h2>
-            <p class="page-desc">Tạo phiếu mượn, gia hạn, trả sách và quản lý lịch sử.</p>
+            <p class="page-desc">Tạo phiếu mượn, gia hạn, chỉnh sửa và theo dõi lịch sử mượn trả.</p>
         </div>
 
         <a href="{{ route('muontra.create') }}" class="btn btn-orange"><i class="bi bi-plus-circle"></i> Tạo phiếu mượn</a>
@@ -34,15 +34,15 @@
                 <th>Ngày trả</th>
                 <th>Trạng thái</th>
                 <th>Sách mượn</th>
-                <th width="230">Thao tác</th>
+                <th width="330">Thao tác</th>
             </tr>
             </thead>
             <tbody>
             @forelse ($borrows as $borrow)
                 <tr>
                     <td>{{ $borrow->maMT }}</td>
-                    <td>{{ $borrow->reader?->tenDG }}</td>
-                    <td>{{ $borrow->staff?->tenNV }}</td>
+                    <td>{{ optional($borrow->reader)->tenDG }}</td>
+                    <td>{{ optional($borrow->staff)->tenNV }}</td>
                     <td>{{ optional($borrow->ngayMuon)->format('d/m/Y') }}</td>
                     <td>{{ optional($borrow->hanTra)->format('d/m/Y') }}</td>
                     <td>{{ optional($borrow->ngayTra)->format('d/m/Y') }}</td>
@@ -58,28 +58,19 @@
                     <td>
                         <ul class="mb-0 ps-3">
                             @foreach ($borrow->details as $detail)
-                                <li>{{ $detail->book?->tenSach }} ({{ $detail->soLuong }})</li>
+                                <li>{{ optional($detail->book)->tenSach }} ({{ $detail->soLuong }})</li>
                             @endforeach
                         </ul>
                     </td>
                     <td class="action-btns">
+                        <a href="{{ route('muontra.show', $borrow) }}" class="btn btn-info btn-sm">Xem chi tiết</a>
                         @if ($borrow->trangThai !== 'Đã trả')
-                            <form method="POST" action="{{ route('muontra.return', $borrow) }}" class="d-inline">
-                                @csrf
-                                <button type="submit" class="btn btn-success btn-sm">Trả sách</button>
-                            </form>
-
                             <form method="POST" action="{{ route('muontra.extend', $borrow) }}" class="d-inline">
                                 @csrf
-                                <button type="submit" class="btn btn-info btn-sm text-white">Gia hạn</button>
+                                <button type="submit" class="btn btn-primary btn-sm">Gia hạn</button>
                             </form>
                         @endif
-
-                        <form method="POST" action="{{ route('muontra.destroy', $borrow) }}" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Xác nhận xóa phiếu mượn này?')">Xóa</button>
-                        </form>
+                        <a href="{{ route('muontra.edit', $borrow) }}" class="btn btn-warning btn-sm">Sửa</a>
                     </td>
                 </tr>
             @empty
@@ -90,5 +81,5 @@
     </div>
 </div>
 
-<div class="mt-3">{{ $borrows->links('pagination::bootstrap-5') }}</div>
+<div class="mt-3">{{ $borrows->links('pagination::bootstrap-4') }}</div>
 @endsection

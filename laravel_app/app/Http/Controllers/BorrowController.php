@@ -13,9 +13,12 @@ use Illuminate\Validation\Rule;
 class BorrowController extends Controller
 {
     public function __construct(
-        private readonly BorrowService $borrowService,
-        private readonly StatusService $statusService,
-    ) {
+        BorrowService $borrowService,
+        StatusService $statusService
+    )
+    {
+        $this->borrowService = $borrowService;
+        $this->statusService = $statusService;
     }
 
     public function index(Request $request)
@@ -57,11 +60,11 @@ class BorrowController extends Controller
             'books.*.maSach' => ['required', Rule::exists('sach', 'maSach')],
             'books.*.soLuong' => ['required', 'integer', 'min:1'],
         ], [
-            'maDG.required' => 'Vui lòng chọn độc giả.',
-            'ngayMuon.required' => 'Ngày mượn không được để trống.',
-            'hanTra.required' => 'Hạn trả không được để trống.',
+            // 'maDG.required' => 'Vui lòng chọn độc giả.',
+            // 'ngayMuon.required' => 'Ngày mượn không được để trống.',
+            // 'hanTra.required' => 'Hạn trả không được để trống.',
             'hanTra.after_or_equal' => 'Hạn trả phải lớn hơn hoặc bằng ngày mượn.',
-            'books.required' => 'Vui lòng chọn ít nhất một sách.',
+            // 'books.required' => 'Vui lòng chọn ít nhất một sách.',
         ]);
 
         $this->borrowService->createBorrow($validated, $request->user());
@@ -69,11 +72,45 @@ class BorrowController extends Controller
         return redirect()->route('muontra.index')->with('success', 'Tạo phiếu mượn thành công.');
     }
 
+    public function show(Borrow $borrow)
+    {
+        $this->statusService->syncBorrowStatus($borrow);
+        $borrow->load(['reader', 'staff', 'details.book']);
+
+        return view('borrows.show', compact('borrow'));
+    }
+
+    public function edit(Borrow $borrow)
+    {
+        $borrow->load(['reader', 'staff']);
+
+        return view('borrows.edit', compact('borrow'));
+    }
+
+    public function update(Request $request, Borrow $borrow)
+    {
+        $data = $request->validate([
+            'ngayMuon' => ['required', 'date'],
+            'hanTra' => ['required', 'date', 'after_or_equal:ngayMuon'],
+        ], [
+            'ngayMuon.required' => 'Ngày mượn không được để trống.',
+            'hanTra.required' => 'Hạn trả không được để trống.',
+            'hanTra.after_or_equal' => 'Hạn trả phải lớn hơn hoặc bằng ngày mượn.',
+        ]);
+
+        $borrow->update($data);
+        $this->statusService->syncBorrowStatus($borrow);
+
+        return redirect()->route('muontra.index')->with('success', 'Cập nhật phiếu mượn thành công.');
+    }
+
     public function returnBook(Borrow $borrow)
     {
         $this->borrowService->returnBorrow($borrow);
 
-        return back()->with('success', 'Trả sách thành công.');
+        return redirect()
+            ->route('muontra.index', ['search' => $borrow->maMT])
+            ->with('success', 'Trả sách thành công.');
     }
 
     public function extend(Borrow $borrow)
